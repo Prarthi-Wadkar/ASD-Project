@@ -5,6 +5,9 @@ from similarity import (
     date_similarity
 )
 
+def is_possible_match(score):
+    """Return True if the score is high enough to be considered a possible match."""
+    return score >= 60
 
 def calculate_match_score(lost_item, found_item):
     """Calculate weighted similarity score between lost and found items."""
@@ -82,12 +85,15 @@ def match_items(lost_item, found_item):
     )
 
     return {
-        "score": final_score,
-        "label": get_match_label(final_score),
-        "breakdown": {
-            "description": description_score,
-            "category": category_score,
-            "location": location_score,
-            "date": date_score
-        }
+    "lost_item_id": lost_item.get("id"),
+    "found_item_id": found_item.get("id"),
+    "score": final_score,
+    "label": get_match_label(final_score),
+    "is_possible_match": is_possible_match(final_score),
+    "breakdown": {
+        "description": description_score,
+        "category": category_score,
+        "location": location_score,
+        "date": date_score
     }
+}

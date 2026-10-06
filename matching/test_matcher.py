@@ -13,6 +13,7 @@ def run_test(name, lost_item, found_item):
 
 # TEST 1: Very similar items
 lost_1 = {
+    "id": 101,
     "category": "electronics",
     "description": "Black Lenovo laptop bag with blue keychain",
     "location": "Library",
@@ -20,6 +21,7 @@ lost_1 = {
 }
 
 found_1 = {
+    "id": 201,
     "category": "electronics",
     "description": "Black Lenovo laptop bag with blue keychain",
     "location": "Library",
