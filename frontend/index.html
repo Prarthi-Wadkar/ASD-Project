@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lost & Found Intelligence System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-blue-600 text-white p-4 shadow-md flex justify-between">
+        <h1 class="font-bold text-lg">Lost & Found Intelligence</h1>
+        <div class="space-x-4">
+            <button onclick="switchView('dashboard')" class="hover:underline">Dashboard</button>
+            <button onclick="switchView('report-lost')" class="hover:underline">Report Lost</button>
+            <button onclick="switchView('report-found')" class="hover:underline">Report Found</button>
+            <button onclick="switchView('browse')" class="hover:underline">Browse Items</button>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-6">
+        <!-- Dashboard View -->
+        <section id="dashboard" class="view-section">
+            <h2 class="text-2xl font-semibold mb-4">Dashboard</h2>
+            <p class="text-gray-600">Welcome! Use the navigation above to report or search for lost items.</p>
+        </section>
+
+        <!-- Report Lost Item View -->
+        <section id="report-lost" class="view-section hidden">
+            <h2 class="text-2xl font-semibold mb-4">Report a Lost Item</h2>
+            <form id="lost-form" class="space-y-4 bg-white p-6 rounded shadow">
+                <input type="text" id="lost-title" placeholder="Item Title" class="w-full p-2 border rounded" required>
+                <textarea id="lost-desc" placeholder="Description" class="w-full p-2 border rounded" required></textarea>
+                <input type="text" id="lost-location" placeholder="Location" class="w-full p-2 border rounded" required>
+                <input type="date" id="lost-date" class="w-full p-2 border rounded" required>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Submit Lost Report</button>
+            </form>
+        </section>
+
+        <!-- Browse / Search View -->
+        <section id="browse" class="view-section hidden">
+            <h2 class="text-2xl font-semibold mb-4">Browse Items & Matches</h2>
+            <div id="items-list" class="space-y-4"></div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
