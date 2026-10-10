@@ -1,0 +1,25 @@
+
+name: Lost and Found CI
+
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-compose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check Docker Compose configuration
+        run: docker compose -f docker-compose.yml config -q
+
+      - name: Check required project files
+        run: |
+          test -f README.md
+          test -f .gitignore
+          test -f docker-compose.yml
