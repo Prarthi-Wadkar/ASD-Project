@@ -1,103 +1,113 @@
+
+import unittest
+
 from matcher import match_items
 
 
-def run_test(name, lost_item, found_item):
-    result = match_items(lost_item, found_item)
+class TestMatcher(unittest.TestCase):
 
-    print(f"\n{name}")
-    print("-" * 40)
-    print(f"Score: {result['score']}%")
-    print(f"Label: {result['label']}")
-    print(f"Breakdown: {result['breakdown']}")
+    def setUp(self):
+        self.lost = {
+            "id": 101,
+            "category": "electronics",
+            "description": "Black Lenovo laptop bag with blue keychain",
+            "location": "Library",
+            "date": "2026-10-05"
+        }
+
+        self.found = {
+            "id": 201,
+            "category": "electronics",
+            "description": "Black Lenovo laptop bag with blue keychain",
+            "location": "Library",
+            "date": "2026-10-05"
+        }
+
+    def test_strong_match(self):
+        result = match_items(self.lost, self.found)
+
+        self.assertEqual(result["score"], 100.0)
+        self.assertEqual(result["label"], "High Match")
+
+    def test_unrelated_items(self):
+        lost = {
+            "category": "electronics",
+            "description": "Black Lenovo laptop bag",
+            "location": "Library",
+            "date": "2026-10-05"
+        }
+        found = {
+            "category": "clothing",
+            "description": "Red cotton jacket",
+            "location": "Canteen",
+            "date": "2026-10-08"
+        }
+
+        result = match_items(lost, found)
+
+        self.assertLess(result["score"], 60)
+        self.assertEqual(result["label"], "Low Match")
+
+    def test_same_item_different_location(self):
+        found = {
+            **self.lost,
+            "location": "Canteen"
+        }
+
+        result = match_items(self.lost, found)
+
+        self.assertGreaterEqual(result["score"], 80)
+        self.assertEqual(result["label"], "High Match")
+
+    def test_possible_match(self):
+        lost = {
+            "category": "electronics",
+            "description": "Black wireless earbuds",
+            "location": "Library",
+            "date": "2026-10-05"
+        }
+        found = {
+            "category": "electronics",
+            "description": "Black Bluetooth earphones",
+            "location": "Library",
+            "date": "2026-10-06"
+        }
+
+        result = match_items(lost, found)
+
+        self.assertGreaterEqual(result["score"], 60)
+        self.assertLess(result["score"], 80)
+        self.assertEqual(result["label"], "Possible Match")
+
+    def test_missing_description(self):
+        lost = {
+            "category": "electronics",
+            "description": "",
+            "location": "Library",
+            "date": "2026-10-05"
+        }
+        found = {
+            "category": "electronics",
+            "description": "Black phone",
+            "location": "Library",
+            "date": "2026-10-05"
+        }
+
+        result = match_items(lost, found)
+
+        self.assertEqual(result["score"], 60.0)
+        self.assertEqual(result["label"], "Possible Match")
+
+    def test_result_contains_score_breakdown(self):
+        result = match_items(self.lost, self.found)
+
+        self.assertIn("score", result)
+        self.assertIn("label", result)
+        self.assertIn("breakdown", result)
+
+        for component in ("description", "category", "location", "date"):
+            self.assertIn(component, result["breakdown"])
 
 
-# TEST 1: Very similar items
-lost_1 = {
-    "id": 101,
-    "category": "electronics",
-    "description": "Black Lenovo laptop bag with blue keychain",
-    "location": "Library",
-    "date": "2026-10-05"
-}
-
-found_1 = {
-    "id": 201,
-    "category": "electronics",
-    "description": "Black Lenovo laptop bag with blue keychain",
-    "location": "Library",
-    "date": "2026-10-05"
-}
-
-run_test("TEST 1 - Strong Match", lost_1, found_1)
-
-
-# TEST 2: Different items
-lost_2 = {
-    "category": "electronics",
-    "description": "Black Lenovo laptop bag",
-    "location": "Library",
-    "date": "2026-10-05"
-}
-
-found_2 = {
-    "category": "clothing",
-    "description": "Red cotton jacket",
-    "location": "Canteen",
-    "date": "2026-10-08"
-}
-
-run_test("TEST 2 - Unrelated Items", lost_2, found_2)
-
-
-# TEST 3: Same item but different location
-lost_3 = {
-    "category": "electronics",
-    "description": "Black Lenovo laptop bag",
-    "location": "Library",
-    "date": "2026-10-05"
-}
-
-found_3 = {
-    "category": "electronics",
-    "description": "Black Lenovo laptop bag",
-    "location": "Canteen",
-    "date": "2026-10-05"
-}
-
-run_test("TEST 3 - Same Item, Different Location", lost_3, found_3)
-
-
-# TEST 4: Same category, somewhat similar description
-lost_4 = {
-    "category": "electronics",
-    "description": "Black wireless earbuds",
-    "location": "Library",
-    "date": "2026-10-05"
-}
-
-found_4 = {
-    "category": "electronics",
-    "description": "Black Bluetooth earphones",
-    "location": "Library",
-    "date": "2026-10-06"
-}
-
-run_test("TEST 4 - Possible Match", lost_4, found_4)
-
-
-# TEST 5: Missing description
-lost_5 = {
-    "category": "electronics",
-    "description": "",
-    "location": "Library",
-    "date": "2026-10-05"
-}
-
-found_5 = {
-    "category": "electronics",
-    "description": "Black phone",
-    "location": "Library",
-    "date": "2026-10-05"
-}
-
-run_test("TEST 5 - Missing Description", lost_5, found_5)
+if __name__ == "__main__":
+    unittest.main()

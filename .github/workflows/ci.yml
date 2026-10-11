@@ -1,0 +1,45 @@
+
+name: Lost and Found CI
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/**"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run matching engine unit tests
+        run: python -m unittest discover -s matching -p "test_*.py" -v
+
+      - name: Validate Docker Compose configuration
+        run: docker compose -f docker-compose.yml config -q
+
+      - name: Build Docker services
+        run: docker compose -f docker-compose.yml build
+
+      - name: Verify required project files
+        run: |
+          test -f README.md
+          test -f .gitignore
+          test -f backend/app.py
+          test -f backend/database.py
+          test -f backend/requirements.txt
+          test -f frontend/index.html
+          test -f frontend/app.js
+          test -f matching/matcher.py
+          test -f matching/test_matcher.py

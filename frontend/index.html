@@ -2,45 +2,283 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lost & Found Intelligence System</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
-    <nav class="bg-blue-600 text-white p-4 shadow-md flex justify-between">
-        <h1 class="font-bold text-lg">Lost & Found Intelligence</h1>
-        <div class="space-x-4">
-            <button onclick="switchView('dashboard')" class="hover:underline">Dashboard</button>
-            <button onclick="switchView('report-lost')" class="hover:underline">Report Lost</button>
-            <button onclick="switchView('report-found')" class="hover:underline">Report Found</button>
-            <button onclick="switchView('browse')" class="hover:underline">Browse Items</button>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white p-4 shadow-md">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <h1 class="font-bold text-lg">
+                Lost & Found Intelligence
+            </h1>
+
+            <div class="flex flex-wrap gap-4">
+                <button type="button" onclick="switchView('dashboard')"
+                    class="hover:underline">
+                    Dashboard
+                </button>
+
+                <button type="button" onclick="switchView('report-lost')"
+                    class="hover:underline">
+                    Report Lost
+                </button>
+
+                <button type="button" onclick="switchView('report-found')"
+                    class="hover:underline">
+                    Report Found
+                </button>
+
+                <button type="button" onclick="switchView('browse')"
+                    class="hover:underline">
+                    Browse Items
+                </button>
+            </div>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto p-6">
-        <!-- Dashboard View -->
+
+        <!-- Dashboard -->
         <section id="dashboard" class="view-section">
-            <h2 class="text-2xl font-semibold mb-4">Dashboard</h2>
-            <p class="text-gray-600">Welcome! Use the navigation above to report or search for lost items.</p>
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-2xl font-semibold mb-4">
+                    Welcome to Lost & Found Intelligence
+                </h2>
+
+                <p class="text-gray-600 mb-6">
+                    Report missing belongings, register items you have found,
+                    and discover possible matches using our matching engine.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button type="button"
+                        onclick="switchView('report-lost')"
+                        class="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-lg">
+                        Report a Lost Item
+                    </button>
+
+                    <button type="button"
+                        onclick="switchView('report-found')"
+                        class="bg-green-600 hover:bg-green-700 text-white p-4 rounded-lg">
+                        Report a Found Item
+                    </button>
+
+                    <button type="button"
+                        onclick="switchView('browse')"
+                        class="bg-gray-800 hover:bg-gray-900 text-white p-4 rounded-lg sm:col-span-2">
+                        Browse Items & Matches
+                    </button>
+                </div>
+            </div>
         </section>
 
-        <!-- Report Lost Item View -->
+        <!-- Report Lost Item -->
         <section id="report-lost" class="view-section hidden">
-            <h2 class="text-2xl font-semibold mb-4">Report a Lost Item</h2>
-            <form id="lost-form" class="space-y-4 bg-white p-6 rounded shadow">
-                <input type="text" id="lost-title" placeholder="Item Title" class="w-full p-2 border rounded" required>
-                <textarea id="lost-desc" placeholder="Description" class="w-full p-2 border rounded" required></textarea>
-                <input type="text" id="lost-location" placeholder="Location" class="w-full p-2 border rounded" required>
-                <input type="date" id="lost-date" class="w-full p-2 border rounded" required>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Submit Lost Report</button>
+            <h2 class="text-2xl font-semibold mb-4">
+                Report a Lost Item
+            </h2>
+
+            <form id="lost-form"
+                class="space-y-4 bg-white p-6 rounded-xl shadow-sm">
+
+                <div>
+                    <label for="lost-title"
+                        class="block font-medium mb-1">
+                        Item Title
+                    </label>
+
+                    <input type="text" id="lost-title"
+                        placeholder="e.g. Black leather wallet"
+                        maxlength="200"
+                        class="w-full p-3 border rounded-lg"
+                        required>
+                </div>
+
+                <div>
+                    <label for="lost-category"
+                        class="block font-medium mb-1">
+                        Category
+                    </label>
+
+                    <select id="lost-category"
+                        class="w-full p-3 border rounded-lg"
+                        required>
+                        <option value="other">Other</option>
+                        <option value="wallet">Wallet</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="id card">ID Card</option>
+                        <option value="keys">Keys</option>
+                        <option value="bag">Bag</option>
+                        <option value="stationery">Stationery</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="lost-desc"
+                        class="block font-medium mb-1">
+                        Description
+                    </label>
+
+                    <textarea id="lost-desc"
+                        placeholder="Describe the item and identifying features"
+                        rows="3"
+                        class="w-full p-3 border rounded-lg"
+                        required></textarea>
+                </div>
+
+                <div>
+                    <label for="lost-location"
+                        class="block font-medium mb-1">
+                        Last Seen Location
+                    </label>
+
+                    <input type="text" id="lost-location"
+                        placeholder="e.g. College library"
+                        maxlength="200"
+                        class="w-full p-3 border rounded-lg"
+                        required>
+                </div>
+
+                <div>
+                    <label for="lost-date"
+                        class="block font-medium mb-1">
+                        Date Lost
+                    </label>
+
+                    <input type="date" id="lost-date"
+                        class="w-full p-3 border rounded-lg"
+                        required>
+                </div>
+
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg">
+                    Submit Lost Report
+                </button>
             </form>
         </section>
 
-        <!-- Browse / Search View -->
-        <section id="browse" class="view-section hidden">
-            <h2 class="text-2xl font-semibold mb-4">Browse Items & Matches</h2>
-            <div id="items-list" class="space-y-4"></div>
+        <!-- Report Found Item -->
+        <section id="report-found" class="view-section hidden">
+            <h2 class="text-2xl font-semibold mb-4">
+                Report a Found Item
+            </h2>
+
+            <form id="found-form"
+                class="space-y-4 bg-white p-6 rounded-xl shadow-sm">
+
+                <div>
+                    <label for="found-title"
+                        class="block font-medium mb-1">
+                        Item Title
+                    </label>
+
+                    <input type="text" id="found-title"
+                        placeholder="e.g. Black wallet found"
+                        maxlength="200"
+                        class="w-full p-3 border rounded-lg"
+                        required>
+                </div>
+
+                <div>
+                    <label for="found-category"
+                        class="block font-medium mb-1">
+                        Category
+                    </label>
+
+                    <select id="found-category"
+                        class="w-full p-3 border rounded-lg"
+                        required>
+                        <option value="other">Other</option>
+                        <option value="wallet">Wallet</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="id card">ID Card</option>
+                        <option value="keys">Keys</option>
+                        <option value="bag">Bag</option>
+                        <option value="stationery">Stationery</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="found-desc"
+                        class="block font-medium mb-1">
+                        Description
+                    </label>
+
+                    <textarea id="found-desc"
+                        placeholder="Describe the item you found"
+                        rows="3"
+                        class="w-full p-3 border rounded-lg"
+                        required></textarea>
+                </div>
+
+                <div>
+                    <label for="found-location"
+                        class="block font-medium mb-1">
+                        Found Location
+                    </label>
+
+                    <input type="text" id="found-location"
+                        placeholder="e.g. College library"
+                        maxlength="200"
+                        class="w-full p-3 border rounded-lg"
+                        required>
+                </div>
+
+                <div>
+                    <label for="found-date"
+                        class="block font-medium mb-1">
+                        Date Found
+                    </label>
+
+                    <input type="date" id="found-date"
+                        class="w-full p-3 border rounded-lg"
+                        required>
+                </div>
+
+                <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg">
+                    Submit Found Item
+                </button>
+            </form>
         </section>
+
+        <!-- Browse Items and Matches -->
+        <section id="browse" class="view-section hidden">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+                <h2 class="text-2xl font-semibold">
+                    Browse Items & Matches
+                </h2>
+
+                <button type="button"
+                    onclick="fetchItems()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                    Refresh Items
+                </button>
+            </div>
+
+            <p class="text-gray-600 mb-4">
+                Browse reported belongings and calculate possible matches
+                for lost items.
+            </p>
+
+            <div id="items-list" class="space-y-4">
+                <p class="text-gray-500">
+                    Open Browse Items to load reports.
+                </p>
+            </div>
+        </section>
+
     </main>
+
+    <footer class="text-center text-sm text-gray-500 py-6">
+        Lost & Found Intelligence System
+    </footer>
+
     <script src="app.js"></script>
+
 </body>
 </html>
